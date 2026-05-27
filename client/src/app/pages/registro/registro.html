@@ -1,1 +1,76 @@
-<p>registro works!</p>
+<div class="min-h-screen flex items-center justify-center bg-gray-100 p-4">
+  <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-2xl">
+    
+    <h2 class="text-2xl font-bold text-center mb-6">Crear Cuenta</h2>
+
+    <form [formGroup]="registroForm" (ngSubmit)="onSubmit()" class="space-y-4">
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium mb-1">Nombre</label>
+          <input type="text" formControlName="nombre" class="w-full border rounded p-2 outline-none focus:ring-2 focus:ring-blue-500">
+          <span *ngIf="registroForm.get('nombre')?.touched && registroForm.get('nombre')?.invalid" class="text-red-500 text-xs">El nombre es requerido.</span>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium mb-1">Apellido</label>
+          <input type="text" formControlName="apellido" class="w-full border rounded p-2 outline-none focus:ring-2 focus:ring-blue-500">
+          <span *ngIf="registroForm.get('apellido')?.touched && registroForm.get('apellido')?.invalid" class="text-red-500 text-xs">El apellido es requerido.</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium mb-1">Correo Electrónico</label>
+          <input type="email" formControlName="correo" class="w-full border rounded p-2 outline-none focus:ring-2 focus:ring-blue-500">
+          <span *ngIf="registroForm.get('correo')?.touched && registroForm.get('correo')?.hasError('required')" class="text-red-500 text-xs">El correo es requerido.</span>
+          <span *ngIf="registroForm.get('correo')?.touched && registroForm.get('correo')?.hasError('email')" class="text-red-500 text-xs">Formato de correo inválido.</span>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium mb-1">Nombre de Usuario</label>
+          <input type="text" formControlName="nombreUsuario" class="w-full border rounded p-2 outline-none focus:ring-2 focus:ring-blue-500">
+          <span *ngIf="registroForm.get('nombreUsuario')?.touched && registroForm.get('nombreUsuario')?.invalid" class="text-red-500 text-xs">El usuario es requerido.</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium mb-1">Contraseña</label>
+          <input type="password" formControlName="password" class="w-full border rounded p-2 outline-none focus:ring-2 focus:ring-blue-500">
+          <span *ngIf="registroForm.get('password')?.touched && registroForm.get('password')?.invalid" class="text-red-500 text-xs">Mínimo 8 caracteres, 1 mayúscula y 1 número.</span>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium mb-1">Repetir Contraseña</label>
+          <input type="password" formControlName="repetirPassword" class="w-full border rounded p-2 outline-none focus:ring-2 focus:ring-blue-500">
+          <span *ngIf="registroForm.hasError('noCoinciden') && registroForm.get('repetirPassword')?.touched" class="text-red-500 text-xs">Las contraseñas no coinciden.</span>
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium mb-1">Fecha de Nacimiento</label>
+        <input type="date" formControlName="fechaNacimiento" class="w-full border rounded p-2 outline-none focus:ring-2 focus:ring-blue-500">
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium mb-1">Descripción Breve</label>
+        <textarea formControlName="descripcionBreve" rows="2" class="w-full border rounded p-2 outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium mb-1">Imagen de Perfil</label>
+        <input type="file" (change)="onFileChange($event)" accept="image/*" class="w-full border rounded p-2">
+      </div>
+
+      <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded font-semibold hover:bg-blue-700 transition">
+        Registrarme
+      </button>
+
+      <p class="text-center text-sm mt-4">
+        ¿Ya tenés cuenta? <a routerLink="/login" class="text-blue-600 hover:underline">Iniciá sesión acá</a>
+      </p>
+
+    </form>
+  </div>
+</div>

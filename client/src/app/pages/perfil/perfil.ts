@@ -1,9 +1,12 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-perfil',
-  imports: [],
-  templateUrl: './perfil.html',
-  styleUrl: './perfil.css',
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: './perfil.html'
 })
-export class Perfil {}
+export class Perfil {
+  // Acá guardaremos los datos del usuario logueado
+}

@@ -1,1 +1,33 @@
-<p>inicio works!</p>
+<nav class="bg-blue-600 text-white p-4 shadow-md flex justify-between items-center">
+  <h1 class="text-xl font-bold">Red Social UTN</h1>
+  <div class="space-x-4">
+    <a href="/perfil" class="hover:underline">Mi Perfil</a>
+    <a href="/login" class="hover:underline text-red-200">Salir</a>
+  </div>
+</nav>
+
+<div class="min-h-screen bg-gray-100 p-4">
+  <div class="max-w-2xl mx-auto space-y-6 mt-6">
+    
+    <div class="bg-white p-4 rounded-lg shadow">
+      <h2 class="font-semibold text-gray-700 mb-2">Crear nueva publicación</h2>
+      <textarea class="w-full border rounded p-2 outline-none focus:ring-2 focus:ring-blue-500" rows="3" placeholder="¿Qué estás pensando?"></textarea>
+      <div class="flex justify-end mt-2">
+        <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Publicar</button>
+      </div>
+    </div>
+
+    <div class="bg-white p-4 rounded-lg shadow">
+      <div class="flex items-center space-x-3 mb-3">
+        <div class="w-10 h-10 bg-gray-300 rounded-full"></div>
+        <div>
+          <p class="font-semibold">Usuario de prueba</p>
+          <p class="text-xs text-gray-500">Hace 2 horas</p>
+        </div>
+      </div>
+      <h3 class="font-bold text-lg">Título de la publicación</h3>
+      <p class="text-gray-700 mt-2">Este es un mensaje de prueba para ver cómo queda maquetada la tarjeta de la publicación en el muro principal.</p>
+    </div>
+
+  </div>
+</div>
