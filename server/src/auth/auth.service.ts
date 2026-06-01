@@ -3,6 +3,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
 import { Usuario } from '../usuarios/entities/usuario.entity';
+import { CreateUsuarioDto } from './dto/create-auth.dto'; 
+import { LoginAuthDto } from './dto/login-auth.dto';
 
 @Injectable()
 export class AuthService {
@@ -10,10 +12,10 @@ export class AuthService {
     @InjectModel(Usuario.name) private usuarioModel: Model<Usuario>
   ) {}
 
-  async registro(datos: any, archivo: Express.Multer.File) {
+  async registro(datos: CreateUsuarioDto, archivo: Express.Multer.File) {
     const { nombreUsuario, correo, password } = datos;
 
-    // 1. Validar si el usuario o correo ya existen en la base de datos
+     
     const existeUsuario = await this.usuarioModel.findOne({
       $or: [{ correo }, { nombreUsuario }]
     });
@@ -44,7 +46,7 @@ export class AuthService {
     };
   }
 
-  async login(credenciales: any) {
+  async login(credenciales: LoginAuthDto) {
     const { identificador, password } = credenciales; 
 
     if (!identificador || !password) {
