@@ -1,10 +1,17 @@
 import { Controller, Post, Body, UploadedFile, UseInterceptors, HttpCode, HttpStatus } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
-import { extname } from 'path';
 import { AuthService } from './auth.service';
 import { CreateUsuarioDto } from './dto/create-auth.dto';
 import { LoginAuthDto } from './dto/login-auth.dto'; 
+import { CloudinaryStorage } from 'multer-storage-cloudinary';
+import { v2 as cloudinary } from 'cloudinary';
+
+// Configuramos Cloudinary aquí (o podrías mover esto a un config service)
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 @Controller('auth')
 export class AuthController {
@@ -12,19 +19,20 @@ export class AuthController {
 
   @Post('registro')
   @UseInterceptors(FileInterceptor('imagenPerfil', {
-    storage: diskStorage({
-      destination: './uploads',  
-      filename: (req, file, cb) => {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-        const ext = extname(file.originalname);
-        cb(null, `${uniqueSuffix}${ext}`);
-      }
-    })
+    storage: new CloudinaryStorage({
+      cloudinary: cloudinary,
+      params: {
+        folder: 'perfiles', // Carpeta en Cloudinary
+        format: async (req, file) => 'jpg',  
+        public_id: (req, file) => `user_${Date.now()}`,
+      } as any,
+    }),
   }))
   registro(@Body() body: CreateUsuarioDto, @UploadedFile() file: Express.Multer.File) {
+    // IMPORTANTE: Ahora 'file' contendrá una propiedad 'path' con la URL de Cloudinary
     return this.authService.registro(body, file);
   }
-
+  
   @Post('login')
   @HttpCode(HttpStatus.OK)  
   login(@Body() body: LoginAuthDto) {

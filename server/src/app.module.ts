@@ -11,7 +11,6 @@ import { join } from 'path';
 
 @Module({
   imports: [
-    // 1. Cargamos las variables de entorno
     ConfigModule.forRoot({
       isGlobal: true, 
     }),
@@ -23,12 +22,6 @@ import { join } from 'path';
       }),
       inject: [ConfigService],
     }),
-    ServeStaticModule.forRoot({
-  rootPath: join(__dirname, '..', 'uploads'),
-  serveRoot: '/uploads/',
-}),
-
-    
     UsuariosModule,
     PublicacionesModule,
     AuthModule,
