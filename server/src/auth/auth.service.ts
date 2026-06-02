@@ -22,7 +22,7 @@ export class AuthService {
     }
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const imageUrl = archivo ? archivo.path : 'https://res.cloudinary.com/dki6gegsz/image/upload/v1/perfiles/default-avatar.jpg';
+    const imageUrl = archivo ? archivo.path : 'https://res.cloudinary.com/dki6gegsz/image/upload/q_auto/f_auto/v1780359436/default-avatar_ghcegh.jpg';
     const nuevoUsuario = new this.usuarioModel({
       ...datos,
       password: hashedPassword,
