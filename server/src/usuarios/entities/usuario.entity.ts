@@ -10,7 +10,7 @@ export class Usuario extends Document {
   apellido!: string;
 
   @Prop({ required: true, unique: true })
-  correo!: string; //  
+  correo!: string; 
 
   @Prop({ required: true, unique: true })
   nombreUsuario!: string;  
@@ -25,7 +25,7 @@ export class Usuario extends Document {
   descripcionBreve?: string;
 
   @Prop({ required: false })
-  imagenPerfil?: string; // Acá guardaremos la URL de la imagen
+  imagenPerfil?: string;  
 
   @Prop({ default: 'usuario', enum: ['usuario', 'administrador'] })
   perfil!: string;
