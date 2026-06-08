@@ -5,11 +5,13 @@ import * as bcrypt from 'bcrypt';
 import { Usuario } from '../usuarios/entities/usuario.entity';
 import { CreateUsuarioDto } from './dto/create-auth.dto'; 
 import { LoginAuthDto } from './dto/login-auth.dto';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectModel(Usuario.name) private usuarioModel: Model<Usuario>
+    @InjectModel(Usuario.name) private usuarioModel: Model<Usuario>,
+    private jwtService: JwtService
   ) {}
 
   async registro(datos: CreateUsuarioDto, archivo: Express.Multer.File) {
@@ -40,23 +42,29 @@ export class AuthService {
   }
 
   async login(credenciales: LoginAuthDto) {
-    const { identificador, password } = credenciales; 
-    const usuario = await this.usuarioModel.findOne({
-      $or: [{ correo: identificador }, { nombreUsuario: identificador }]
-    });
-    if (!usuario) {
-      throw new UnauthorizedException('Credenciales incorrectas');
-    }
-    const passwordValida = await bcrypt.compare(password, usuario.password);
-    if (!passwordValida) {
-      throw new UnauthorizedException('Credenciales incorrectas');
-    }
-    const usuarioObj = usuario.toObject();
-    const { password: _, ...usuarioData } = usuarioObj;
+      const { identificador, password } = credenciales; 
+      const usuario = await this.usuarioModel.findOne({
+        $or: [{ correo: identificador }, { nombreUsuario: identificador }]
+      });
 
-    return {
-      mensaje: 'Login exitoso',
-      usuario: usuarioData
-    };
+      if (!usuario || !(await bcrypt.compare(password, usuario.password))) {
+        throw new UnauthorizedException('Credenciales incorrectas');
+      }
+
+      // Generar el Token
+      const payload = { sub: usuario._id, email: usuario.correo, perfil: usuario.perfil };
+      return this.jwtService.sign(payload);  
+    }
+
+
+  async refreshToken(user: any) {
+    const payload = { sub: user.id, email: user.email, perfil: user.perfil };
+    return this.jwtService.sign(payload);
+  }  
+
+
   }
-}
+
+  
+
+

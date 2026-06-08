@@ -1,10 +1,14 @@
-// server/src/auth/auth.controller.ts
-import { Controller, Post, Body, UploadedFile, UseInterceptors, HttpCode, HttpStatus } from '@nestjs/common';
+import { 
+  Controller, Post, Body, UploadedFile, UseInterceptors, 
+  HttpCode, HttpStatus, Res, UseGuards, Req 
+} from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import type{ Response } from 'express';
 import { AuthService } from './auth.service';
 import { CreateUsuarioDto } from './dto/create-auth.dto';
 import { LoginAuthDto } from './dto/login-auth.dto';
-import { getCloudinaryStorage } from '../utils/cloudinary.config';  
+import { getCloudinaryStorage } from '../utils/cloudinary.config';
+import { JwtAuthGuard } from './jwt-auth.guard'; 
 
 @Controller('auth')
 export class AuthController {
@@ -20,7 +24,38 @@ export class AuthController {
   
   @Post('login')
   @HttpCode(HttpStatus.OK)
-  login(@Body() body: LoginAuthDto) {
-    return this.authService.login(body);
+  async login(@Body() body: LoginAuthDto, @Res({ passthrough: true }) res: Response) {
+    const token = await this.authService.login(body);
+
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: true, 
+      maxAge: 15 * 60 * 1000, // 15 minutos exactos
+      sameSite: 'lax'
+    });
+    
+    return { mensaje: 'Login exitoso' };
+  }
+
+  @Post('autorizar')
+  @UseGuards(JwtAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  autorizar(@Req() req: any) {
+    
+    return req.user;
+  }
+
+  @Post('refrescar')
+  @UseGuards(JwtAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  async refrescar(@Req() req: any, @Res({ passthrough: true }) res: Response) {
+    const newToken = await this.authService.refreshToken(req.user);
+    
+    res.cookie('token', newToken, {
+      httpOnly: true,
+      maxAge: 15 * 60 * 1000,
+    });
+    
+    return { mensaje: 'Token refrescado' };
   }
 }
