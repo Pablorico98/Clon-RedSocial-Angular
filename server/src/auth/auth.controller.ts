@@ -6,7 +6,6 @@ import { LoginAuthDto } from './dto/login-auth.dto';
 import { CloudinaryStorage } from 'multer-storage-cloudinary';
 import { v2 as cloudinary } from 'cloudinary';
 
-// Configuramos Cloudinary aquí (o podrías mover esto a un config service)
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
@@ -29,7 +28,7 @@ export class AuthController {
     }),
   }))
   registro(@Body() body: CreateUsuarioDto, @UploadedFile() file: Express.Multer.File) {
-    // IMPORTANTE: Ahora 'file' contendrá una propiedad 'path' con la URL de Cloudinary
+   
     return this.authService.registro(body, file);
   }
   
