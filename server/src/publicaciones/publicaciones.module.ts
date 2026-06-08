@@ -6,9 +6,10 @@ import { Publicacion, PublicacionSchema } from './entities/publicacione.entity';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: Publicacion.name, schema: PublicacionSchema }])
+    MongooseModule.forFeature([{ name: Publicacion.name, schema: PublicacionSchema }]),
   ],
   controllers: [PublicacionesController],
   providers: [PublicacionesService],
+  exports: [PublicacionesService],
 })
 export class PublicacionesModule {}

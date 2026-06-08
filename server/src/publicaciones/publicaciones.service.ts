@@ -1,26 +1,72 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model, Types } from 'mongoose';
+import { Publicacion } from './entities/publicacione.entity';
 import { CreatePublicacioneDto } from './dto/create-publicacione.dto';
-import { UpdatePublicacioneDto } from './dto/update-publicacione.dto';
 
 @Injectable()
 export class PublicacionesService {
-  create(createPublicacioneDto: CreatePublicacioneDto) {
-    return 'This action adds a new publicacione';
+  constructor(
+    @InjectModel(Publicacion.name) private publicacionModel: Model<Publicacion>,
+  ) {}
+
+  async create(dto: CreatePublicacioneDto, file: Express.Multer.File, autorId: string) {
+    const nuevaPublicacion = new this.publicacionModel({
+      ...dto,
+      autor: new Types.ObjectId(autorId),
+      imagen: file ? file.path : null,  
+    });
+    return await nuevaPublicacion.save();
   }
 
-  findAll() {
-    return `This action returns all publicaciones`;
+  async findAll(query: any) {
+    const { orden, usuarioId, offset = 0, limit = 10 } = query;
+    const filter: any = { activo: true };
+
+    if (usuarioId) filter.autor = new Types.ObjectId(usuarioId);
+
+   
+    let sortOptions: any = { createdAt: -1 };  
+    if (orden === 'likes') sortOptions = { 'likes.length': -1 };
+    if (orden === 'fecha') sortOptions = { createdAt: -1 };
+
+    return await this.publicacionModel
+      .find(filter)
+      .sort(sortOptions)
+      .skip(Number(offset))
+      .limit(Number(limit))
+      .populate('autor', 'nombre nombreUsuario')  
+      .exec();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} publicacione`;
+  async remove(id: string, userId: string) {
+    const publicacion = await this.publicacionModel.findById(id);
+    if (!publicacion) throw new NotFoundException('Publicación no encontrada');
+
+    if (publicacion.autor.toString() !== userId) {
+      throw new UnauthorizedException('No tienes permiso para borrar esto');
+    }
+
+    return await this.publicacionModel.findByIdAndUpdate(
+      id,
+      { activo: false },
+      { new: true },
+    );
   }
 
-  update(id: number, updatePublicacioneDto: UpdatePublicacioneDto) {
-    return `This action updates a #${id} publicacione`;
+  async addLike(id: string, userId: string) {
+    return await this.publicacionModel.findByIdAndUpdate(
+      id,
+      { $addToSet: { likes: new Types.ObjectId(userId) } },
+      { new: true },
+    );
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} publicacione`;
+  async removeLike(id: string, userId: string) {
+    return await this.publicacionModel.findByIdAndUpdate(
+      id,
+      { $pull: { likes: new Types.ObjectId(userId) } },
+      { new: true },
+    );
   }
 }

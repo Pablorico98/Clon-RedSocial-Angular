@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 
-@Schema({ timestamps: true }) // Agrega createdAt y updatedAt automáticamente
+@Schema({ timestamps: true })  
 export class Publicacion extends Document {
   @Prop({ required: true })
   titulo!: string;
@@ -10,17 +10,17 @@ export class Publicacion extends Document {
   mensaje!: string;
 
   @Prop({ required: false })
-  imagen?: string; // Usamos el '?' porque es opcional
-
-  // Relación con el Usuario que crea el post
+  imagen?: string;  
+   
   @Prop({ type: Types.ObjectId, ref: 'Usuario', required: true })
   autor!: Types.ObjectId;
+  
+  @Prop({ default: true })
+  activo!: boolean;  
 
-  // Array de IDs de usuarios que le dieron "Me gusta"
   @Prop({ type: [{ type: Types.ObjectId, ref: 'Usuario' }], default: [] })
   likes!: Types.ObjectId[];
 
-  // Los comentarios los guardamos como un array de objetos dentro de la publicación
   @Prop({
     type: [
       {
