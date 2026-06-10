@@ -1,46 +1,40 @@
-import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { RouterLink, Router } from '@angular/router';
+import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
-  templateUrl: './login.html'
+  imports: [ReactiveFormsModule],  
+  templateUrl: './login.html',
 })
-export class Login {
+export class LoginComponent {
   loginForm: FormGroup;
-  private router = inject(Router); // Inyectamos el enrutador para poder navegar
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router
+  ) {
     this.loginForm = this.fb.group({
-      identificador: ['', Validators.required],
-      password: ['', [
-        Validators.required, 
-        Validators.minLength(8), 
-        Validators.pattern(/^(?=.*[A-Z])(?=.*\d).+$/)
-      ]]
+      email: ['', [Validators.required, Validators.email]],  
+      password: ['', [Validators.required, Validators.minLength(6)]]
     });
   }
 
-  // Función exclusiva para testing
-  autocompletarDatos() {
-    this.loginForm.patchValue({
-      identificador: 'pablo@test.com', // Ya queda cargado tu mail
-      password: 'Password123'          // Y tu contraseña
-    });
-  }
-
-  onSubmit() {
-    if (this.loginForm.invalid) {
-      this.loginForm.markAllAsTouched(); 
-      return;
+  onLogin() {
+    if (this.loginForm.valid) {
+      this.authService.login(this.loginForm.value).subscribe({
+        next: (response) => {
+          console.log('Login exitoso', response);
+          this.router.navigate(['/inicio']); // Redirigir al inicio
+        },
+        error: (err) => {
+          console.error('Error al loguear', err);
+          alert('Credenciales incorrectas'); // Usare modales después
+        }
+      });
     }
-
-    console.log('Simulando login exitoso con:', this.loginForm.value);
-    
-    // Como esto es un mockup temporal, navegamos directamente al Inicio
-    this.router.navigate(['/inicio']);
   }
 }

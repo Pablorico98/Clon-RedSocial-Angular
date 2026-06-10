@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:3000' // La ruta local de tu NestJS
+  apiUrl: 'https://pablo-rico-tp-2-2026-c1.vercel.app'  
 };
