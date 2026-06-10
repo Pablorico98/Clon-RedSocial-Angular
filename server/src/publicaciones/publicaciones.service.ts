@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
-import { Publicacion } from './entities/publicacione.entity';
+import { Publicacion } from './entities/publicaciones.entity';
 import { CreatePublicacioneDto } from './dto/create-publicacione.dto';
 
 @Injectable()
@@ -55,12 +55,18 @@ export class PublicacionesService {
   }
 
   async addLike(id: string, userId: string) {
-    return await this.publicacionModel.findByIdAndUpdate(
-      id,
-      { $addToSet: { likes: new Types.ObjectId(userId) } },
-      { new: true },
-    );
+  const publicacion = await this.publicacionModel.findOneAndUpdate(
+    { _id: id, activo: true }, 
+    { $addToSet: { likes: new Types.ObjectId(userId) } },
+    { returnDocument: 'after' },
+  );
+
+  if (!publicacion) {
+    throw new NotFoundException('La publicación no existe o no está activa');
   }
+
+  return publicacion;
+}
 
   async removeLike(id: string, userId: string) {
     return await this.publicacionModel.findByIdAndUpdate(

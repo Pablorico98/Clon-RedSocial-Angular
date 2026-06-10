@@ -8,6 +8,7 @@ import { PublicacionesModule } from './publicaciones/publicaciones.module';
 import { AuthModule } from './auth/auth.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { ComentariosModule } from './comentarios/comentarios.module';
 
 @Module({
   imports: [
@@ -22,7 +23,7 @@ import { join } from 'path';
       }),
       inject: [ConfigService],
     }),
-    UsuariosModule,
+    UsuariosModule,ComentariosModule,
     PublicacionesModule,
     AuthModule,
   ],

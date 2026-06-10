@@ -21,17 +21,7 @@ export class Publicacion extends Document {
   @Prop({ type: [{ type: Types.ObjectId, ref: 'Usuario' }], default: [] })
   likes!: Types.ObjectId[];
 
-  @Prop({
-    type: [
-      {
-        usuario: { type: Types.ObjectId, ref: 'Usuario', required: true },
-        texto: { type: String, required: true },
-        fecha: { type: Date, default: Date.now }
-      }
-    ],
-    default: []
-  })
-  comentarios!: any[];
+  
 }
 
 export const PublicacionSchema = SchemaFactory.createForClass(Publicacion);
