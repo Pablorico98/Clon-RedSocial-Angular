@@ -1,16 +1,19 @@
 // client/src/app/app.routes.ts
 import { Routes } from '@angular/router';
 import { authGuard } from './guards/auth.guard';
+import { publicGuard } from './guards/public.guard';
 
 export const routes: Routes = [
   {
     path: 'login',
-    title: 'Iniciar Sesión',  
+    title: 'Iniciar Sesión',
+    canActivate: [publicGuard],
     loadComponent: () => import('./pages/login/login').then(m => m.LoginComponent)
   },
   {
     path: 'registro',
     title: 'Crear Cuenta',
+    canActivate: [publicGuard],
     loadComponent: () => import('./pages/registro/registro').then(m => m.RegistroComponent)
   },
   {
