@@ -40,13 +40,15 @@ export class AuthController {
     return { mensaje: 'Login exitoso' };
   }
 
-  @Post('autorizar')
-  @UseGuards(JwtAuthGuard)
-  @HttpCode(HttpStatus.OK)
-  autorizar(@Req() req: any) {
-     
-    return req.user;
-  }
+ @Post('autorizar')
+@UseGuards(JwtAuthGuard)
+@HttpCode(HttpStatus.OK)
+autorizar(@Req() req: any) {
+  console.log('Cookies recibidas en el servidor:', req.cookies); 
+  console.log('Usuario extraído por el Guard:', req.user);
+  
+  return req.user;
+}
 
   @Post('refrescar')
   @UseGuards(JwtAuthGuard)
