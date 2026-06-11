@@ -28,7 +28,7 @@ export class AuthController {
     const token = await this.authService.login(body);
 
     res.cookie('token', token, {
-      httpOnly: true,
+      httpOnly: false, // Permite acceso desde JavaScript para facilitar el manejo en el cliente
       secure: true, 
       maxAge: 15 * 60 * 1000, // 15 minutos exactos
       sameSite: 'lax'

@@ -29,6 +29,10 @@ export class AuthService {
     );
   }
 
+  isAuthenticated(): boolean {
+  return this.usuarioSubject.getValue() !== null;
+}
+
   logout(): void {
     this.usuarioSubject.next(null);
   }
