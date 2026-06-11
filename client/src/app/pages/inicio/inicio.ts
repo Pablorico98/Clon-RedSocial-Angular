@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-inicio',
@@ -8,5 +10,16 @@ import { CommonModule } from '@angular/common';
   templateUrl: './inicio.html'
 })
 export class Inicio {
-  // Más adelante acá manejaremos el array de publicaciones que venga del backend
+  private authService = inject(AuthService);
+  private router = inject(Router);
+
+  onLogout() {
+    this.authService.logout().subscribe({
+      next: () => this.router.navigate(['/login']),
+      error: () => {
+        this.authService.limpiarSesion();
+        this.router.navigate(['/login']);
+      }
+    });
+  }
 }

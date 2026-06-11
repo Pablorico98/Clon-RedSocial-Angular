@@ -62,10 +62,13 @@ export class AuthService {
   async refreshToken(user: any) {
     const payload = { sub: user.id, email: user.email, perfil: user.perfil };
     return this.jwtService.sign(payload);
-  }  
-
-
   }
+
+  async obtenerPorId(id: string) {
+    const usuario = await this.usuarioModel.findById(id).select('-password').lean();
+    return usuario;
+  }
+}
 
   
 

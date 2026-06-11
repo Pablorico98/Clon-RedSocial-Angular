@@ -30,10 +30,16 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean {
-  return this.usuarioSubject.getValue() !== null;
-}
+    return this.usuarioSubject.getValue() !== null;
+  }
 
-  logout(): void {
+  limpiarSesion(): void {
     this.usuarioSubject.next(null);
+  }
+
+  logout(): Observable<any> {
+    return this.http.post(`${this.apiUrl}/auth/logout`, {}).pipe(
+      tap(() => this.usuarioSubject.next(null))
+    );
   }
 }
