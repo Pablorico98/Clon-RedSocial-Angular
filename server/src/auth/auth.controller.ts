@@ -3,7 +3,7 @@ import {
   HttpCode, HttpStatus, Res, UseGuards, Req 
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import type{ Response } from 'express';
+import type { Response } from 'express';  
 import { AuthService } from './auth.service';
 import { CreateUsuarioDto } from './dto/create-auth.dto';
 import { LoginAuthDto } from './dto/login-auth.dto';
@@ -27,13 +27,16 @@ export class AuthController {
   async login(@Body() body: LoginAuthDto, @Res({ passthrough: true }) res: Response) {
     const token = await this.authService.login(body);
 
+    
     res.cookie('token', token, {
-      httpOnly: false, // Permite acceso desde JavaScript para facilitar el manejo en el cliente
-      secure: true, 
-      maxAge: 15 * 60 * 1000, // 15 minutos exactos
-      sameSite: 'lax'
+      httpOnly: true,     // Importante: No dejar en false. Mantiene el token seguro contra XSS.
+      secure: false,      // false permite probar en localhost (http). Cambiar a true solo en deploy HTTPS.
+      maxAge: 15 * 60 * 1000, // 15 minutos
+      sameSite: 'lax',    // Estándar para evitar problemas de CORS en peticiones POST
+      path: '/'           // La cookie debe estar disponible en toda la aplicación
     });
     
+  
     return { mensaje: 'Login exitoso' };
   }
 
@@ -41,7 +44,7 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
   autorizar(@Req() req: any) {
-    
+     
     return req.user;
   }
 
@@ -53,7 +56,10 @@ export class AuthController {
     
     res.cookie('token', newToken, {
       httpOnly: true,
+      secure: false,
       maxAge: 15 * 60 * 1000,
+      sameSite: 'lax',
+      path: '/'
     });
     
     return { mensaje: 'Token refrescado' };
