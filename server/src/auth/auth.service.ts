@@ -42,7 +42,7 @@ export class AuthService {
   }
 
   async login(credenciales: LoginAuthDto) {
-      const { identificador, password } = credenciales; 
+      const { identificador, password } = credenciales;
       const usuario = await this.usuarioModel.findOne({
         $or: [{ correo: identificador }, { nombreUsuario: identificador }]
       });
@@ -51,9 +51,11 @@ export class AuthService {
         throw new UnauthorizedException('Credenciales incorrectas');
       }
 
-      // Generar el Token
       const payload = { sub: usuario._id, email: usuario.correo, perfil: usuario.perfil };
-      return this.jwtService.sign(payload);  
+      const token = this.jwtService.sign(payload);
+
+      const { password: _, ...usuarioLogueado } = usuario.toObject();
+      return { token, usuarioLogueado };
     }
 
 

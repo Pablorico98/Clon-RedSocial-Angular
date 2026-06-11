@@ -15,7 +15,7 @@ export class AuthService {
 
   login(credentials: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/auth/login`, credentials).pipe(
-      tap((user: any) => this.usuarioSubject.next(user))
+      tap((usuario: any) => this.usuarioSubject.next(usuario))
     );
   }
 
