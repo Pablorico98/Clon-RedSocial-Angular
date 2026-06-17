@@ -18,10 +18,11 @@ export class Inicio implements OnInit {
   private router = inject(Router);
   private fb = inject(FormBuilder);
 
-  publicaciones = signal<any[]>([]);
-  ordenActual = signal<'fecha' | 'likes'>('fecha');
-  isLoading = signal<boolean>(false);
-  hasMore = signal<boolean>(true);
+  public publicaciones = signal<any[]>([]);
+  public  ordenActual = signal<'fecha' | 'likes'>('fecha');
+  public isLoading = signal<boolean>(false);
+  public hasMore = signal<boolean>(true);
+  public isSubmitting = signal<boolean>(false);
   
   limit = 5;
   offset = 0;
@@ -30,7 +31,6 @@ export class Inicio implements OnInit {
   // Formulario de Creación
   publicacionForm: FormGroup;
   imagenFile: File | null = null;
-  isSubmitting = signal<boolean>(false);
 
   constructor() {
     this.publicacionForm = this.fb.group({
