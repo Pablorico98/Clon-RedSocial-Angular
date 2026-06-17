@@ -2,7 +2,7 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 import { PublicacionesService } from '../../services/publicaciones.service';
-import { Router } from '@angular/router';
+import { Router,RouterModule } from '@angular/router';
 import { PublicacionCardComponent } from '../../components/publicacion-card/publicacion-card';
 
 
@@ -10,7 +10,7 @@ import { PublicacionCardComponent } from '../../components/publicacion-card/publ
 @Component({
   selector: 'app-inicio',
   standalone: true,
-  imports: [CommonModule, PublicacionCardComponent],  
+  imports: [CommonModule, PublicacionCardComponent, RouterModule],  
   templateUrl: './inicio.html'
 })
 export class Inicio implements OnInit {
