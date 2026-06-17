@@ -30,8 +30,8 @@ export class LoginComponent {
   // Botón de ingreso rápido (para desarrollo en el TP)
   fillData() {
     this.loginForm.patchValue({
-      identificador: 'pablo.i.rico98@gmail.com', 
-      password: 'A123456789'  
+      identificador: 'pablo@test.com', 
+      password: 'Password123'  
     });
   }
 

@@ -19,25 +19,44 @@ export class PublicacionesService {
     return await nuevaPublicacion.save();
   }
 
-  async findAll(query: any) {
-    const { orden, usuarioId, offset = 0, limit = 10 } = query;
-    const filter: any = { activo: true };
+ async findAll(query: any) {
+  const { orden, usuarioId, offset = 0, limit = 10 } = query;
+  const filter: any = { activo: true };
 
-    if (usuarioId) filter.autor = new Types.ObjectId(usuarioId);
+  if (usuarioId) filter.autor = new Types.ObjectId(usuarioId);
 
-   
-    let sortOptions: any = { createdAt: -1 };  
-    if (orden === 'likes') sortOptions = { 'likes.length': -1 };
-    if (orden === 'fecha') sortOptions = { createdAt: -1 };
-
-    return await this.publicacionModel
-      .find(filter)
-      .sort(sortOptions)
-      .skip(Number(offset))
-      .limit(Number(limit))
-      .populate('autor', 'nombre nombreUsuario')  
-      .exec();
+  if (orden === 'likes') {
+    return await this.publicacionModel.aggregate([
+      { $match: filter },
+      { $addFields: { cantidadLikes: { $size: { $ifNull: ["$likes", []] } } } },
+      { $sort: { cantidadLikes: -1, createdAt: -1 } },
+      { $skip: Number(offset) },
+      { $limit: Number(limit) },
+      {
+        $lookup: {
+          from: 'usuarios',  
+          localField: 'autor',
+          foreignField: '_id',
+          as: 'autor'
+        }
+      },
+      { $unwind: '$autor' }, 
+      {
+        $project: {
+          'autor.password': 0
+        }
+      }
+    ]);
   }
+
+  return await this.publicacionModel
+    .find(filter)
+    .sort({ createdAt: -1 })
+    .skip(Number(offset))
+    .limit(Number(limit))
+    .populate('autor', 'nombre nombreUsuario imagenPerfil') 
+    .exec();
+}
 
   async remove(id: string, userId: string) {
     const publicacion = await this.publicacionModel.findById(id);
