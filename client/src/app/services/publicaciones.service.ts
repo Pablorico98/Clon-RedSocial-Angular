@@ -49,6 +49,9 @@ obtenerPublicaciones(limit: number = 10, offset: number = 0, orden: 'fecha' | 'l
   editarComentario(pubId: string, comentarioId: string, textoMensaje: string): Observable<any> {
     return this.http.put(`${this.apiUrl}/publicaciones/${pubId}/comentarios/${comentarioId}`, { texto: textoMensaje });
   }
-
+  
+  crearPublicacion(formData: FormData): Observable<any> {
+    return this.http.post(`${this.apiUrl}/publicaciones`, formData);
+  }
 
 }

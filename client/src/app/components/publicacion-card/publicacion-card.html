@@ -20,7 +20,7 @@
   </div>
 
   <h3 class="text-lg font-bold text-gray-800 mb-1">{{ publicacion.titulo }}</h3>
-  <p class="text-gray-700 text-sm mb-3">{{ publicacion.descripcion }}</p>
+  <p class="text-gray-700 text-sm mb-3">{{ publicacion.mensaje }}</p>
 
   @if (publicacion.imagen) {
     <img [src]="publicacion.imagen" alt="Imagen adjunta" class="rounded-lg max-h-80 w-full object-cover mb-3">
