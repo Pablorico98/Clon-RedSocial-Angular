@@ -1,42 +1,58 @@
-import { Component } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './login.html',
 })
 export class LoginComponent {
-  loginForm: FormGroup;
+  private fb = inject(FormBuilder);
+  private authService = inject(AuthService);
+  private router = inject(Router);
 
-  constructor(
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private router: Router
-  ) {
+  loginForm: FormGroup;
+  
+  isLoading = signal<boolean>(false);
+  errorMessage = signal<string | null>(null);
+
+  constructor() {
     this.loginForm = this.fb.group({
       identificador: ['', [Validators.required]],
       password: ['', [Validators.required, Validators.minLength(8)]]
     });
   }
 
-  // Botón de ingreso rápido (para desarrollo)
+  // Botón de ingreso rápido (para desarrollo en el TP)
   fillData() {
     this.loginForm.patchValue({
-      identificador: 'pablo@utn.edu.ar', // Reemplaza con tu cuenta de test
-      password: '12345678'      // Reemplaza con tu password de test
+      identificador: 'pablo.i.rico98@gmail.com', 
+      password: 'A123456789'  
     });
   }
 
   onLogin() {
-    if (this.loginForm.valid) {
-      this.authService.login(this.loginForm.value).subscribe({
-        next: () => this.router.navigate(['/inicio']),
-        error: (err) => console.error('Error de login:', err)
-      });
+    if (this.loginForm.invalid) {
+      this.loginForm.markAllAsTouched();
+      return;
     }
+
+    this.isLoading.set(true);
+    this.errorMessage.set(null);
+
+    this.authService.login(this.loginForm.value).subscribe({
+      next: () => {
+        this.isLoading.set(false);
+        this.router.navigate(['/inicio']);
+      },
+      error: (err) => {
+        this.isLoading.set(false);
+        this.errorMessage.set(err.error?.message || 'Credenciales incorrectas. Verifica tu usuario o contraseña.');
+      }
+    });
   }
 }
