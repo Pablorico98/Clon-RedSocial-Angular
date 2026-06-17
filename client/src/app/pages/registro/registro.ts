@@ -82,7 +82,7 @@ export class RegistroComponent {
     this.authService.registro(formData).subscribe({
       next: () => {
         this.isLoading.set(false);
-        this.router.navigate(['/login']);
+        this.router.navigate(['/inicio']);
       },
       error: (err) => {
         this.isLoading.set(false);

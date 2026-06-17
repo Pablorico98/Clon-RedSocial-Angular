@@ -14,7 +14,7 @@ export class AuthService {
     private jwtService: JwtService
   ) {}
 
-  async registro(datos: CreateUsuarioDto, archivo: Express.Multer.File) {
+async registro(datos: CreateUsuarioDto, archivo: Express.Multer.File) {
     const { nombreUsuario, correo, password } = datos;
     const existeUsuario = await this.usuarioModel.findOne({
       $or: [{ correo }, { nombreUsuario }]
@@ -31,14 +31,13 @@ export class AuthService {
       password: hashedPassword,
       imagenPerfil: imageUrl
     });
-    await nuevoUsuario.save();
+    await nuevoUsuario.save();    
+    const payload = { sub: nuevoUsuario._id, email: nuevoUsuario.correo, perfil: nuevoUsuario.perfil };
+    const token = this.jwtService.sign(payload);
     const usuarioObj = nuevoUsuario.toObject();
-    const { password: _, ...usuarioGuardado } = usuarioObj;
+    const { password: _, ...usuarioLogueado } = usuarioObj;
 
-    return {
-      mensaje: 'Usuario registrado exitosamente',
-      usuario: usuarioGuardado
-    };
+    return { token, usuarioLogueado };
   }
 
   async login(credenciales: LoginAuthDto) {

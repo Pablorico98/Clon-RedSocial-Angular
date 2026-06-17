@@ -33,7 +33,12 @@ export class AuthService {
   }
 
   registro(userData: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/auth/registro`, userData);
+    return this.http.post(`${this.apiUrl}/auth/registro`, userData).pipe(
+      tap((usuario: any) => {
+        this.usuarioSubject.next(usuario);
+        this.iniciarTemporizadorSesion(); 
+      })
+    );
   }
 
   autorizar(): Observable<any> {

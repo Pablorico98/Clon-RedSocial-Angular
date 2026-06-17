@@ -14,12 +14,27 @@ import { JwtAuthGuard } from './jwt-auth.guard';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('registro')
+ @Post('registro')
   @UseInterceptors(FileInterceptor('imagenPerfil', {
     storage: getCloudinaryStorage('perfiles'),
   }))
-  registro(@Body() body: CreateUsuarioDto, @UploadedFile() file: Express.Multer.File) {
-    return this.authService.registro(body, file);
+  async registro(
+    @Body() body: CreateUsuarioDto, 
+    @UploadedFile() file: Express.Multer.File,
+    @Res({ passthrough: true }) res: Response 
+  ) {
+    const { token, usuarioLogueado } = await this.authService.registro(body, file);
+    const isProd = process.env.NODE_ENV === 'production';
+
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: isProd,
+      maxAge: 15 * 60 * 1000,
+      sameSite: isProd ? 'none' : 'lax',
+      path: '/'
+    });
+
+    return usuarioLogueado;
   }
   
   @Post('login')
