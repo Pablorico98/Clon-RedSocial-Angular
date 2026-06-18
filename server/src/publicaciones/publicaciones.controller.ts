@@ -39,7 +39,7 @@ export class PublicacionesController {
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
   remove(@Param('id') id: string, @Req() req: any) {
-    return this.publicacionesService.remove(id, req.user.id);
+    return this.publicacionesService.remove(id, req.user.id, req.user.perfil);
   }
 
   // 4. Likes: POST /publicaciones/:id/like

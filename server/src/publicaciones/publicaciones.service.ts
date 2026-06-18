@@ -25,7 +25,6 @@ async findAll(query: any) {
 
   if (usuarioId) filter.autor = new Types.ObjectId(usuarioId);
 
-  // Definimos el orden dinámicamente
   let sortOptions: any = { createdAt: -1 };
   if (orden === 'likes') sortOptions = { cantidadLikes: -1, createdAt: -1 };
 
@@ -65,11 +64,11 @@ async findAll(query: any) {
   ]);
 }
 
-  async remove(id: string, userId: string) {
+  async remove(id: string, userId: string, perfil?: string) {
     const publicacion = await this.publicacionModel.findById(id);
     if (!publicacion) throw new NotFoundException('Publicación no encontrada');
 
-    if (publicacion.autor.toString() !== userId) {
+    if (perfil !== 'administrador' && publicacion.autor.toString() !== userId) {
       throw new UnauthorizedException('No tienes permiso para borrar esto');
     }
 

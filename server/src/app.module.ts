@@ -9,13 +9,14 @@ import { AuthModule } from './auth/auth.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { ComentariosModule } from './comentarios/comentarios.module';
+import { EstadisticasModule } from './estadisticas/estadisticas.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal: true, 
+      isGlobal: true,
     }),
-    // 2. Configuramos Mongoose   
+    // 2. Configuramos Mongoose
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
@@ -23,9 +24,10 @@ import { ComentariosModule } from './comentarios/comentarios.module';
       }),
       inject: [ConfigService],
     }),
-    UsuariosModule,ComentariosModule,
+    UsuariosModule, ComentariosModule,
     PublicacionesModule,
     AuthModule,
+    EstadisticasModule,
   ],
   controllers: [AppController],
   providers: [AppService],

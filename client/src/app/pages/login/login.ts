@@ -27,12 +27,12 @@ export class LoginComponent {
     });
   }
 
-  // Botón de ingreso rápido (para desarrollo en el TP)
-  fillData() {
-    this.loginForm.patchValue({
-      identificador: 'pablo@test.com', 
-      password: 'Password123'  
-    });
+  fillAdmin() {
+    this.loginForm.patchValue({ identificador: 'pablo@test.com', password: 'Password123' });
+  }
+
+  fillUsuario() {
+    this.loginForm.patchValue({ identificador: 'santirico@gmail.com', password: 'A123456789' });
   }
 
   onLogin() {

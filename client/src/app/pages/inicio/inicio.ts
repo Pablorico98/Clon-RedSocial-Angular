@@ -5,11 +5,12 @@ import { PublicacionesService } from '../../services/publicaciones.service';
 import { Router, RouterModule } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PublicacionCardComponent } from '../../components/publicacion-card/publicacion-card';
+import { SoloNumerosDirective } from '../../directives/solo-numeros.directive';
 
 @Component({
   selector: 'app-inicio',
   standalone: true,
-  imports: [CommonModule, PublicacionCardComponent, RouterModule, ReactiveFormsModule],
+  imports: [CommonModule, PublicacionCardComponent, RouterModule, ReactiveFormsModule, SoloNumerosDirective],
   templateUrl: './inicio.html'
 })
 export class Inicio implements OnInit {

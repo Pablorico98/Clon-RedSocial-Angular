@@ -50,6 +50,10 @@ async registro(datos: CreateUsuarioDto, archivo: Express.Multer.File) {
         throw new UnauthorizedException('Credenciales incorrectas');
       }
 
+      if (usuario.activo === false) {
+        throw new UnauthorizedException('Tu cuenta está deshabilitada. Contacta al administrador.');
+      }
+
       const payload = { sub: usuario._id, email: usuario.correo, perfil: usuario.perfil };
       const token = this.jwtService.sign(payload);
 

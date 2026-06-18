@@ -62,13 +62,22 @@
         }
       </button>
 
-      <button 
-        type="button" 
-        (click)="fillData()"
-        class="w-full bg-gray-200 text-gray-700 font-semibold py-2 rounded hover:bg-gray-300 transition text-sm"
-      >
-        Ingreso rápido (Auto-fill)
-      </button>
+      <div class="flex gap-2 pt-1">
+        <button
+          type="button"
+          (click)="fillAdmin()"
+          class="flex-1 bg-purple-50 text-purple-700 font-semibold py-2 rounded hover:bg-purple-100 transition text-xs border border-purple-200"
+        >
+          ⚡ Admin
+        </button>
+        <button
+          type="button"
+          (click)="fillUsuario()"
+          class="flex-1 bg-blue-50 text-blue-700 font-semibold py-2 rounded hover:bg-blue-100 transition text-xs border border-blue-200"
+        >
+          ⚡ Usuario
+        </button>
+      </div>
     </form>
   </div>
 </div>

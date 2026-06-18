@@ -1,0 +1,198 @@
+<nav class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-10">
+  <div class="max-w-5xl mx-auto px-4 h-14 flex items-center gap-3">
+    <a routerLink="/inicio" class="flex items-center gap-1.5 text-sm text-gray-500 hover:text-indigo-600 transition">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+      </svg>
+      Inicio
+    </a>
+    <span class="text-gray-300">/</span>
+    <span class="text-sm font-semibold text-gray-800">Gestión de usuarios</span>
+  </div>
+</nav>
+
+<div class="min-h-screen bg-gray-50">
+  <div class="max-w-5xl mx-auto p-6">
+
+    <div class="flex justify-between items-center mb-6">
+      <div>
+        <h1 class="text-2xl font-bold text-gray-800">Usuarios</h1>
+        <p class="text-sm text-gray-500 mt-0.5">{{ usuarios().length }} usuarios registrados</p>
+      </div>
+      <button
+        (click)="mostrarFormulario.set(!mostrarFormulario())"
+        class="flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition text-sm font-medium"
+      >
+        @if (mostrarFormulario()) {
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+          Cancelar
+        } @else {
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+          Nuevo usuario
+        }
+      </button>
+    </div>
+
+    @if (mostrarFormulario()) {
+      <form [formGroup]="form" (ngSubmit)="crearUsuario()" class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
+        <h2 class="text-base font-semibold text-gray-700 mb-4">Datos del nuevo usuario</h2>
+
+        @if (error()) {
+          <div class="bg-red-50 border-l-4 border-red-400 text-red-700 text-sm p-3 rounded mb-4">
+            {{ error() }}
+          </div>
+        }
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-medium text-gray-600 mb-1">Nombre</label>
+            <input formControlName="nombre" type="text" appAutoFocus
+              class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none" />
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-gray-600 mb-1">Apellido</label>
+            <input formControlName="apellido" type="text"
+              class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none" />
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-gray-600 mb-1">Correo</label>
+            <input formControlName="correo" type="email"
+              class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none" />
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-gray-600 mb-1">Nombre de usuario</label>
+            <input formControlName="nombreUsuario" type="text"
+              class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none" />
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-gray-600 mb-1">Contraseña</label>
+            <input formControlName="password" type="password"
+              class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none" />
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-gray-600 mb-1">Fecha de nacimiento</label>
+            <input formControlName="fechaNacimiento" type="date"
+              class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none" />
+          </div>
+          <div class="col-span-2">
+            <label class="block text-xs font-medium text-gray-600 mb-1">Descripción breve</label>
+            <input formControlName="descripcionBreve" type="text"
+              class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none" />
+          </div>
+          <div class="col-span-2">
+            <label class="block text-xs font-medium text-gray-600 mb-2">Perfil</label>
+            <div class="flex gap-6">
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input formControlName="perfil" type="radio" value="usuario" class="accent-indigo-600" />
+                <span class="text-sm text-gray-700">Usuario</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input formControlName="perfil" type="radio" value="administrador" class="accent-indigo-600" />
+                <span class="text-sm text-gray-700">Administrador</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex gap-3 mt-5">
+          <button
+            type="submit"
+            [disabled]="form.invalid || enviando()"
+            class="bg-indigo-600 text-white px-5 py-2 rounded-lg hover:bg-indigo-700 disabled:opacity-50 transition text-sm font-medium"
+          >
+            {{ enviando() ? 'Creando...' : 'Crear usuario' }}
+          </button>
+          <button
+            type="button"
+            (click)="mostrarFormulario.set(false); form.reset({ perfil: 'usuario' })"
+            class="px-5 py-2 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition text-sm"
+          >
+            Cancelar
+          </button>
+        </div>
+      </form>
+    }
+
+    @if (errorCarga()) {
+      <div class="bg-red-50 border-l-4 border-red-400 text-red-700 text-sm p-4 rounded-lg mb-4 flex items-center justify-between">
+        <span>{{ errorCarga() }}</span>
+        <button (click)="cargar()" class="ml-4 text-xs underline hover:no-underline">Reintentar</button>
+      </div>
+    }
+
+    @if (cargando()) {
+      <div class="flex justify-center py-16">
+        <div class="flex flex-col items-center gap-3 text-gray-400">
+          <svg class="animate-spin w-7 h-7" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+          </svg>
+          <span class="text-sm">Cargando usuarios...</span>
+        </div>
+      </div>
+    } @else {
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <table class="w-full text-sm">
+          <thead class="bg-gray-50 border-b border-gray-100">
+            <tr>
+              <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Usuario</th>
+              <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Correo</th>
+              <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Perfil</th>
+              <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Estado</th>
+              <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Acciones</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-50">
+            @for (u of usuarios(); track u._id) {
+              <tr appResaltar color="#f5f3ff" class="transition">
+                <td class="px-4 py-3">
+                  <div class="flex items-center gap-2.5">
+                    <span class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold flex items-center justify-center shrink-0">
+                      {{ (u.nombre + ' ' + u.apellido) | iniciales }}
+                    </span>
+                    <div>
+                      <p class="font-medium text-gray-800">{{ u.nombre }} {{ u.apellido }}</p>
+                      <p class="text-xs text-gray-400">&#64;{{ u.nombreUsuario }}</p>
+                    </div>
+                  </div>
+                </td>
+                <td class="px-4 py-3 text-gray-500">{{ u.correo }}</td>
+                <td class="px-4 py-3">
+                  <span
+                    class="px-2 py-0.5 rounded-full text-xs font-medium"
+                    [class]="u.perfil === 'administrador' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'"
+                  >
+                    {{ u.perfil }}
+                  </span>
+                </td>
+                <td class="px-4 py-3">
+                  <span
+                    class="px-2 py-0.5 rounded-full text-xs font-medium"
+                    [class]="u.activo !== false ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'"
+                  >
+                    {{ u.activo !== false ? 'Activo' : 'Inactivo' }}
+                  </span>
+                </td>
+                <td class="px-4 py-3">
+                  @if (u.activo !== false) {
+                    <button (click)="deshabilitar(u._id)" class="text-xs text-red-500 hover:text-red-700 font-medium hover:underline transition">
+                      Deshabilitar
+                    </button>
+                  } @else {
+                    <button (click)="habilitar(u._id)" class="text-xs text-green-600 hover:text-green-800 font-medium hover:underline transition">
+                      Habilitar
+                    </button>
+                  }
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="5" class="text-center text-gray-400 py-10 text-sm">No hay usuarios registrados</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </div>
+</div>

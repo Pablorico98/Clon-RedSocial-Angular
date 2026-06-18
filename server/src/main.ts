@@ -14,8 +14,9 @@ async function bootstrap() {
   ));
   app.enableCors({
     origin: [
-      'http://localhost:4200', 
-      'https://pablo-rico-tp-2-2026-c1-16o1.vercel.app' 
+      'http://localhost:4200',
+      'http://localhost:8080',
+      'https://pablo-rico-tp-2-2026-c1-16o1.vercel.app'
     ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,  

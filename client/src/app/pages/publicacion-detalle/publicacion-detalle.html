@@ -13,9 +13,10 @@
   
   @if (publicacion()) {
     <!-- 1. La Publicación Principal  -->
-    <app-publicacion-card 
-      [publicacion]="publicacion()" 
+    <app-publicacion-card
+      [publicacion]="publicacion()"
       [usuarioActualId]="usuarioActual()?._id"
+      [truncar]="false"
       (darLike)="onDarLike($event)"
       (quitarLike)="onQuitarLike($event)"
       (eliminar)="onEliminarPub($event)">

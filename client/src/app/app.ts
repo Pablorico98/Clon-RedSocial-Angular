@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { AuthService } from './services/auth.service';
+import { ConfirmModalService } from './services/confirm-modal.service';
 
 @Component({
   selector: 'app-root',
@@ -10,6 +11,7 @@ import { AuthService } from './services/auth.service';
 })
 export class App {
   authService = inject(AuthService);
+  confirmModal = inject(ConfirmModalService);
 
   get mostrarModal() {
     return this.authService.mostrarModal();
