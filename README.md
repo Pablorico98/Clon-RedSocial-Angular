@@ -34,7 +34,6 @@ Aplicación web interactiva tipo Red Social desarrollada con arquitectura **Mono
 
 ## 📁 Estructura del Monorepo
 
-```text
 ├── client/          # Frontend en Angular
 │   ├── src/app/
 │   │   ├── components/    # Componentes reutilizables (publicacion-card, etc.)
@@ -49,6 +48,33 @@ Aplicación web interactiva tipo Red Social desarrollada con arquitectura **Mono
     │   ├── publicaciones/ # Gestión de posteos y multimedia
     │   ├── comentarios/   # Módulo de interacción
     │   └── estadisticas/  # Módulo de reportes y métricas
+
+
+💻 Instalación y Ejecución Local
+
+git clone [https://github.com/Pablorico98/Clon-RedSocial-Angular.git](https://github.com/Pablorico98/Clon-RedSocial-Angular.git)
+cd Clon-RedSocial-Angular
+
+Configurar el Servidor (/server):
+
+cd server
+npm install
+Crea un archivo .env configurando MONGODB_URI, JWT_SECRET, CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY y CLOUDINARY_API_SECRET.
+
+
+Configurar el Cliente (/client):
+
+Bash
+cd ../client
+npm install
+npm start
+
+
+👨‍💻 Autor
+Pablo Ignacio Rico — Técnico Universitario en Programación (UTN-FRA)
+
+LinkedIn | GitHub
+
 
 
 
