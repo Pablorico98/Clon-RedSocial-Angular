@@ -1,82 +1,206 @@
-# 📱 Clon de Red Social Full Stack (Monorepo)
+# 📱 Clon de Red Social Full Stack
 
-Aplicación web interactiva tipo Red Social desarrollada con arquitectura **Monorepo**, conectando un cliente dinámico en Angular con un servidor robusto en NestJS y MongoDB Atlas.
+Aplicación web Full Stack desarrollada como proyecto integrador, utilizando una arquitectura **Monorepo** con Angular para el frontend y NestJS para el backend.
 
-🔗 **Demo en vivo:** [https://pablo-rico-tp-2-2026-c1-16o1.vercel.app/](https://pablo-rico-tp-2-2026-c1-16o1.vercel.app/)
+El proyecto integra autenticación, autorización basada en roles, publicaciones, comentarios, perfiles de usuario, almacenamiento de imágenes en la nube, estadísticas administrativas y una base de datos MongoDB Atlas.
 
----
+🌐 **Demo:**  
+https://pablo-rico-tp-2-2026-c1-16o1.vercel.app/
 
-## 🛠️ Stack Tecnológico
-
-### Frontend (`/client`):
-* **Framework:** Angular 19+ (TypeScript)
-* **PWA Support:** Service Workers & Web Manifest integrados
-* **Características:** Directivas personalizadas (`auto-focus`, `resaltar`, `solo-numeros`), Pipes personalizados (`iniciales`, `tiempo-transcurrido`, `truncate`), Interceptores HTTP para JWT y Guards de navegación (`auth.guard`, `public.guard`, `admin.guard`).
-
-### Backend (`/server`):
-* **Framework:** NestJS (Node.js)
-* **Autenticación:** JWT (JSON Web Tokens) + Passport Strategy + Bcrypt
-* **Base de Datos:** MongoDB Atlas mediante Mongoose / TypeORM
-* **Gestión de Multimedia:** Cloudinary API para carga y almacenamiento optimizado de imágenes
-* **Validación:** DTOs estructurados con `class-validator`
+💻 **Repositorio:**  
+https://github.com/Pablorico98/Clon-RedSocial-Angular
 
 ---
 
-## ✨ Funcionalidades Principales
+## 🚀 Características principales
 
-* 🔐 **Autenticación y Roles:** Registro, inicio de sesión seguro mediante JWT y control de acceso basado en roles (Usuario / Admin).
-* 📝 **Gestión de Publicaciones:** Creación, edición, eliminación e interacción en feed de posteos con imágenes almacenadas en Cloudinary.
-* 💬 **Módulo de Comentarios:** Hilo de comentarios en tiempo real integrados a cada publicación.
-* 📊 **Panel de Administración (Dashboard):** Visualización de estadísticas globales del sistema y gestión avanzada de usuarios.
-* 👤 **Perfil de Usuario:** Personalización de avatar y datos de cuenta.
+### 🔐 Autenticación y autorización
+
+- Registro de usuarios.
+- Inicio de sesión.
+- Autenticación mediante JWT.
+- Passport Strategy.
+- Encriptación de contraseñas mediante Bcrypt.
+- Sistema de roles: Usuario / Administrador.
+- Protección de rutas mediante Guards.
+- Interceptor HTTP para gestión automática del token JWT.
+
+### 📝 Publicaciones
+
+- Creación de publicaciones.
+- Edición y eliminación.
+- Feed de publicaciones.
+- Publicaciones con imágenes.
+- Almacenamiento de imágenes mediante Cloudinary.
+
+### 💬 Comentarios
+
+- Sistema de comentarios asociado a publicaciones.
+- Gestión de comentarios mediante la API.
+
+### 👤 Usuarios y perfiles
+
+- Gestión de usuarios.
+- Perfil de usuario.
+- Personalización del avatar.
+- Administración de datos de cuenta.
+
+### 📊 Dashboard administrativo
+
+- Acceso exclusivo para administradores.
+- Visualización de estadísticas globales.
+- Gestión de usuarios.
+- Información general del sistema.
+
+### 📱 Progressive Web App
+
+El frontend incorpora funcionalidades PWA mediante:
+
+- Service Workers.
+- Web Manifest.
 
 ---
 
-## 📁 Estructura del Monorepo
+## 🛠️ Stack tecnológico
 
-├── client/          # Frontend en Angular
-│   ├── src/app/
-│   │   ├── components/    # Componentes reutilizables (publicacion-card, etc.)
-│   │   ├── pages/         # Páginas (inicio, login, registro, perfil, dashboard)
-│   │   ├── guards/        # Protección de rutas por JWT y Rol
-│   │   ├── interceptors/  # Inyección automática de Tokens HTTP
-│   │   └── services/      # Servicios de comunicación API
-└── server/          # API RESTful en NestJS
-    ├── src/
-    │   ├── auth/          # Módulo de Autenticación, JWT Strategy & Guards
-    │   ├── usuarios/      # CRUD de usuarios y roles
-    │   ├── publicaciones/ # Gestión de posteos y multimedia
-    │   ├── comentarios/   # Módulo de interacción
-    │   └── estadisticas/  # Módulo de reportes y métricas
+### Frontend
+
+- **Angular 19+**
+- **TypeScript**
+- HTML5
+- CSS3
+- Progressive Web App (PWA)
+
+También se implementaron:
+
+- Directivas personalizadas.
+- Pipes personalizados.
+- Angular Guards.
+- HTTP Interceptors.
+- Servicios para comunicación con la API.
+- Componentes reutilizables.
+
+### Backend
+
+- **Node.js**
+- **NestJS**
+- API REST.
+- JWT.
+- Passport.
+- Bcrypt.
+- DTOs.
+- `class-validator`.
+- Guards.
+
+### Base de datos
+
+- **MongoDB Atlas**
+
+### Servicios externos
+
+- **Cloudinary** para almacenamiento y gestión de imágenes.
+- **Vercel** para despliegue de la aplicación.
+
+---
+
+## 🧩 Arquitectura
+
+El proyecto utiliza una arquitectura **Monorepo**, separando frontend y backend dentro del mismo repositorio.
+
+```
+Clon-RedSocial-Angular/
+│
+├── client/
+│   └── Angular
+│
+└── server/
+    └── NestJS
+
+Frontend
+client/
+└── src/
+    └── app/
+        ├── components/
+        ├── pages/
+        ├── guards/
+        ├── interceptors/
+        └── services/
+
+Backend
+server/
+└── src/
+    ├── auth/
+    ├── usuarios/
+    ├── publicaciones/
+    ├── comentarios/
+    └── estadisticas/
+```
+
+📂 Principales módulos
+
+| Módulo        | Descripción                         |
+| ------------- | ----------------------------------- |
+| Auth          | Registro, login, JWT y autorización |
+| Usuarios      | Gestión de usuarios y roles         |
+| Publicaciones | CRUD de publicaciones e imágenes    |
+| Comentarios   | Gestión de comentarios              |
+| Estadísticas  | Métricas y dashboard administrativo |
 
 
-💻 Instalación y Ejecución Local
-
-git clone [https://github.com/Pablorico98/Clon-RedSocial-Angular.git](https://github.com/Pablorico98/Clon-RedSocial-Angular.git)
+▶️ Instalación y ejecución local
+1. Clonar el repositorio
+git clone https://github.com/Pablorico98/Clon-RedSocial-Angular.git
 cd Clon-RedSocial-Angular
 
-Configurar el Servidor (/server):
-
+2. Configurar el backend
 cd server
 npm install
-Crea un archivo .env configurando MONGODB_URI, JWT_SECRET, CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY y CLOUDINARY_API_SECRET.
 
+Crear un archivo .env con las variables necesarias:
 
-Configurar el Cliente (/client):
+MONGODB_URI=
+JWT_SECRET=
+CLOUDINARY_CLOUD_NAME=
+CLOUDINARY_API_KEY=
+CLOUDINARY_API_SECRET=
 
-Bash
-cd ../client
+Luego iniciar el servidor:
+
+npm run start:dev
+
+3. Configurar el frontend
+
+Abrir otra terminal:
+
+cd client
 npm install
 npm start
 
 
+🌐 Demo online
+
+La aplicación se encuentra desplegada y disponible para probar:
+
+https://pablo-rico-tp-2-2026-c1-16o1.vercel.app/
+
+🎯 Objetivo del proyecto
+
+El objetivo principal fue desarrollar una aplicación web completa utilizando tecnologías modernas de frontend y backend, integrando:
+
+Arquitectura Full Stack.
+API REST.
+Autenticación y autorización.
+Persistencia de datos.
+Servicios cloud.
+Desarrollo frontend basado en componentes.
+Despliegue de la aplicación.
 👨‍💻 Autor
-Pablo Ignacio Rico — Técnico Universitario en Programación (UTN-FRA)
 
-LinkedIn | GitHub
+Pablo Ignacio Rico
+
+Técnico Universitario en Programación — UTN-FRA
+[🔗 LinkedIn ](https://www.linkedin.com/in/pablo-ignacio-rico-ba8507227/)
 
 
 
-
-
-            
+    
